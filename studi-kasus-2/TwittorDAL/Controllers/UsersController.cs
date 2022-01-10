@@ -22,6 +22,14 @@ namespace TwittorDAL.Controllers
       else LoggingConsole.Log("Registration failed");
     }
 
+    public void UpdateProfile(ProfileInput profileInput)
+    {
+      UserDAL user = new UserDAL(_iconfiguration);
+      var result = user.UpdateProfile(profileInput);
+      if (result.Result) LoggingConsole.Log("Update profile succeded");
+      else LoggingConsole.Log("Update profile failed");
+    }
+
     public void UpdatePassword(UpdatePassInput updatePassInput)
     {
       UserDAL user = new UserDAL(_iconfiguration);

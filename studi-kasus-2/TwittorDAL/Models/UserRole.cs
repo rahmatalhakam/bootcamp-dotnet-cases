@@ -7,10 +7,10 @@ namespace TwittorDAL.Models
     [Key]
     public int Id { get; set; }
     [Required]
-    public int RolesId { get; set; }
+    public int RoleId { get; set; }
 
     [Required]
-    public int UsersId { get; set; }
+    public int UserId { get; set; }
 
     public User User { get; set; }
 

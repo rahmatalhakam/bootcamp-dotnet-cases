@@ -26,8 +26,8 @@ namespace TwittorDAL.Data
       {
         using (var context = new AppDbContext(_connString))
         {
-          var result = context.Users.Where(u => u.Username == userInput.Username || u.Email == userInput.Email).SingleOrDefault();
-          if (result != null) return false;
+          // var result = context.Users.Where(u => u.Username == userInput.Username || u.Email == userInput.Email).SingleOrDefault();
+          // if (result != null) return false;
           var user = new User
           {
             Username = userInput.Username,
@@ -40,7 +40,7 @@ namespace TwittorDAL.Data
           };
           await context.Users.AddAsync(user);
           await context.SaveChangesAsync();
-          if (!await AddRoleForUser(new UserRoleInput { RolesId = 2, UsersId = user.Id })) return false;
+          if (!await AddRoleForUser(new UserRoleInput { RoleId = 2, UserId = user.Id })) return false;
           return true;
         }
       }
@@ -98,13 +98,9 @@ namespace TwittorDAL.Data
       {
         using (var context = new AppDbContext(_connString))
         {
-          var result = context.Roles.Where(u => u.Id == input.RolesId).SingleOrDefault();
-          if (result == null) return false;
-          var result2 = context.Users.Where(u => u.Id == input.UsersId).SingleOrDefault(); ;
-          if (result == null) return false;
-          var result3 = context.UserRoles.Where(ur => ur.RolesId == input.RolesId && ur.UsersId == input.UsersId).SingleOrDefault();
-          if (result != null) return false;
-          await context.UserRoles.AddAsync(new UserRole { RolesId = input.RolesId, UsersId = input.UsersId });
+          var result3 = context.UserRoles.Where(ur => ur.RoleId == input.RoleId && ur.UserId == input.UserId).SingleOrDefault();
+          if (result3 != null) return false;
+          await context.UserRoles.AddAsync(new UserRole { RoleId = input.RoleId, UserId = input.UserId });
           await context.SaveChangesAsync();
           return true;
         }
@@ -122,15 +118,35 @@ namespace TwittorDAL.Data
       {
         using (var context = new AppDbContext(_connString))
         {
-          var result = context.Roles.Where(u => u.Id == input.OldRolesId).SingleOrDefault();
+          var result3 = context.UserRoles.Where(ur => ur.RoleId == input.OldRoleId && ur.UserId == input.UserId).SingleOrDefault();
+          if (result3 == null) return false;
+          if (result3.RoleId == input.NewRoleId) return false;
+          result3.RoleId = input.NewRoleId;
+          result3.UserId = input.UserId;
+          await context.SaveChangesAsync();
+          return true;
+        }
+      }
+      catch (System.Exception ex)
+      {
+        LoggingConsole.Log(ex.Message);
+        return false;
+      }
+    }
+
+    public async Task<Boolean> UpdateProfile(ProfileInput input)
+    {
+      try
+      {
+
+        using (var context = new AppDbContext(_connString))
+        {
+          var result = context.Users.Where(u => u.Id == input.Id && u.Lock == false).SingleOrDefault();
           if (result == null) return false;
-          var result2 = context.Users.Where(u => u.Id == input.UsersId).SingleOrDefault(); ;
-          if (result == null) return false;
-          var result3 = context.UserRoles.Where(ur => ur.RolesId == input.OldRolesId && ur.UsersId == input.UsersId).SingleOrDefault();
-          if (result == null) return false;
-          if (result3.RolesId == input.NewRolesId) return false;
-          result3.RolesId = input.NewRolesId;
-          result3.UsersId = input.UsersId;
+          result.Email = input.Email;
+          result.FirstName = input.FirstName;
+          result.LastName = input.LastName;
+          result.Username = input.Username;
           await context.SaveChangesAsync();
           return true;
         }

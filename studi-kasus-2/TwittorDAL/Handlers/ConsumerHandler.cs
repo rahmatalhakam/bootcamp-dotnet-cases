@@ -7,6 +7,7 @@ using Confluent.Kafka;
 using Microsoft.Extensions.Configuration;
 using TwittorDAL.Controllers;
 using TwittorDAL.Dtos;
+using TwittorDAL.Helpers;
 
 namespace TwittorDAL.Handlers
 {
@@ -26,8 +27,20 @@ namespace TwittorDAL.Handlers
       {
         Name = "UserThread"
       };
+      Thread twittorThread = new Thread(TwittorTopicListener)
+      {
+        Name = "TwittorThread"
+      };
+
+      // Thread commentThread = new Thread(CommentTopicListener)
+      // {
+      //   Name = "CommentThread"
+      // };
+
 
       userThread.Start();
+      twittorThread.Start();
+      // commentThread.Start();
 
 
       return Task.CompletedTask;
@@ -52,7 +65,7 @@ namespace TwittorDAL.Handlers
       };
       using (var consumer = new ConsumerBuilder<string, string>(config).Build())
       {
-        Console.WriteLine("Connected");
+        LoggingConsole.Log("Connected to " + topic);
         consumer.Subscribe(topic);
         try
         {
@@ -64,9 +77,29 @@ namespace TwittorDAL.Handlers
             UsersController usersController = new UsersController(_iconfiguration);
             switch (cr.Message.Key)
             {
-              case "register":
-                RegisterInput deserialized = JsonSerializer.Deserialize<RegisterInput>(cr.Message.Value);
-                usersController.Registration(deserialized);
+              case "Registration":
+                RegisterInput des1 = JsonSerializer.Deserialize<RegisterInput>(cr.Message.Value);
+                usersController.Registration(des1);
+                break;
+              case "UpdatePasword":
+                UpdatePassInput des2 = JsonSerializer.Deserialize<UpdatePassInput>(cr.Message.Value);
+                usersController.UpdatePassword(des2);
+                break;
+              case "LockUser":
+                LockUserInput des3 = JsonSerializer.Deserialize<LockUserInput>(cr.Message.Value);
+                usersController.LockUser(des3);
+                break;
+              case "AddRoleForUser":
+                UserRoleInput des4 = JsonSerializer.Deserialize<UserRoleInput>(cr.Message.Value);
+                usersController.AddRoleForUser(des4);
+                break;
+              case "UpdateRoleForUser":
+                UserRoleUpdate des5 = JsonSerializer.Deserialize<UserRoleUpdate>(cr.Message.Value);
+                usersController.UpdateRoleForUser(des5);
+                break;
+              case "UpdateProfile":
+                ProfileInput des6 = JsonSerializer.Deserialize<ProfileInput>(cr.Message.Value);
+                usersController.UpdateProfile(des6);
                 break;
               default:
                 break;
@@ -83,6 +116,78 @@ namespace TwittorDAL.Handlers
         }
       }
     }
+
+    public void TwittorTopicListener()
+    {
+      var server = _iconfiguration.GetSection("ConsumerConfig:BootstrapServers").Value;
+      var groupId = _iconfiguration.GetSection("ConsumerConfig:GroupId").Value;
+      var config = new ConsumerConfig
+      {
+        BootstrapServers = server,
+        GroupId = groupId,
+        AutoOffsetReset = AutoOffsetReset.Earliest
+      };
+      var topic = "twittor-twittor-topic";
+      CancellationTokenSource cts = new CancellationTokenSource();
+      Console.CancelKeyPress += (_, e) =>
+      {
+        e.Cancel = true; // prevent the process from terminating.
+        cts.Cancel();
+      };
+      using (var consumer = new ConsumerBuilder<string, string>(config).Build())
+      {
+        LoggingConsole.Log("Connected to " + topic);
+        consumer.Subscribe(topic);
+        try
+        {
+          while (true)
+          {
+            var cr = consumer.Consume(cts.Token);
+            Console.WriteLine($"Consumed record with key: {cr.Message.Key} and value: {cr.Message.Value}");
+            //tambahin switch case utk setiap event key yang berbeda
+            // UsersController usersController = new UsersController(_iconfiguration);
+            // switch (cr.Message.Key)
+            // {
+            //   case "Registration":
+            //     RegisterInput des1 = JsonSerializer.Deserialize<RegisterInput>(cr.Message.Value);
+            //     usersController.Registration(des1);
+            //     break;
+            //   case "UpdatePasword":
+            //     UpdatePassInput des2 = JsonSerializer.Deserialize<UpdatePassInput>(cr.Message.Value);
+            //     usersController.UpdatePassword(des2);
+            //     break;
+            //   case "LockUser":
+            //     LockUserInput des3 = JsonSerializer.Deserialize<LockUserInput>(cr.Message.Value);
+            //     usersController.LockUser(des3);
+            //     break;
+            //   case "AddRoleForUser":
+            //     UserRoleInput des4 = JsonSerializer.Deserialize<UserRoleInput>(cr.Message.Value);
+            //     usersController.AddRoleForUser(des4);
+            //     break;
+            //   case "UpdateRoleForUser":
+            //     UserRoleUpdate des5 = JsonSerializer.Deserialize<UserRoleUpdate>(cr.Message.Value);
+            //     usersController.UpdateRoleForUser(des5);
+            //     break;
+            //   case "UpdateProfile":
+            //     ProfileInput des6 = JsonSerializer.Deserialize<ProfileInput>(cr.Message.Value);
+            //     usersController.UpdateProfile(des6);
+            //     break;
+            //   default:
+            //     break;
+            // }
+          }
+        }
+        catch (OperationCanceledException)
+        {
+          // Ctrl-C was pressed.
+        }
+        finally
+        {
+          consumer.Close();
+        }
+      }
+    }
+
   }
 
 }
