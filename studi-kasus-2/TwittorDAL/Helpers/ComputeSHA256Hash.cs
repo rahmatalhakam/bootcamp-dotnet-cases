@@ -1,7 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace TwittorDAL.Helper
+namespace TwittorDAL.Helpers
 {
   public class ComputeHash
   {

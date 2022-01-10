@@ -2,6 +2,7 @@ using System;
 using Microsoft.Extensions.Configuration;
 using TwittorDAL.Data;
 using TwittorDAL.Dtos;
+using TwittorDAL.Helpers;
 
 namespace TwittorDAL.Controllers
 {
@@ -17,8 +18,40 @@ namespace TwittorDAL.Controllers
     {
       UserDAL user = new UserDAL(_iconfiguration);
       var result = user.Registration(registerInput);
-      if (result.Result) Console.WriteLine("Registration added");
-      else Console.WriteLine("Registration failed");
+      if (result.Result) LoggingConsole.Log("Registration succeded");
+      else LoggingConsole.Log("Registration failed");
+    }
+
+    public void UpdatePassword(UpdatePassInput updatePassInput)
+    {
+      UserDAL user = new UserDAL(_iconfiguration);
+      var result = user.UpdatePasword(updatePassInput);
+      if (result.Result) LoggingConsole.Log("Change password succeded");
+      else LoggingConsole.Log("Change password failed");
+    }
+
+    public void LockUser(LockUserInput lockUserInput)
+    {
+      UserDAL user = new UserDAL(_iconfiguration);
+      var result = user.LockUser(lockUserInput);
+      if (result.Result) LoggingConsole.Log("update lock user succeded");
+      else LoggingConsole.Log("update lock user failed");
+    }
+
+    public void AddRoleForUser(UserRoleInput roleInput)
+    {
+      UserDAL user = new UserDAL(_iconfiguration);
+      var result = user.AddRoleForUser(roleInput);
+      if (result.Result) LoggingConsole.Log("add role for user succeded");
+      else LoggingConsole.Log("add role for user failed");
+    }
+
+    public void UpdateRoleForUser(UserRoleUpdate roleInput)
+    {
+      UserDAL user = new UserDAL(_iconfiguration);
+      var result = user.UpdateRoleForUser(roleInput);
+      if (result.Result) LoggingConsole.Log("update role user succeded");
+      else LoggingConsole.Log("update role user failed");
     }
   }
 }

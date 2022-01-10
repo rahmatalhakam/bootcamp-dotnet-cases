@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Twittor.Models
+namespace TwittorDAL.Models
 {
   public class User
   {
