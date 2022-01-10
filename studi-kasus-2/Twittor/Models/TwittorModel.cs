@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Twittor.Models
 {
-  public class Twittor
+  public class TwittorModel
   {
     [Key]
     public int Id { get; set; }

@@ -42,7 +42,7 @@ namespace Twittor.Models
 
     public ICollection<UserRole> UserRoles { get; set; }
 
-    public ICollection<Twittor> Twittors { get; set; }
+    public ICollection<TwittorModel> TwittorModels { get; set; }
 
     public ICollection<Comment> Comments { get; set; }
 

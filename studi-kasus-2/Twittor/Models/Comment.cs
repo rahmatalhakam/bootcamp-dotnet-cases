@@ -16,7 +16,7 @@ namespace Twittor.Models
     [DataType(DataType.DateTime)]
     public DateTime CreatedAt { get; set; }
 
-    public Twittor Twittor { get; set; }
+    public TwittorModel TwittorModel { get; set; }
     public User User { get; set; }
   }
 }

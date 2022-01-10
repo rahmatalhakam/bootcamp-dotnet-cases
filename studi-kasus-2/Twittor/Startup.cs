@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Twittor.Data;
 
 namespace Twittor
 {
@@ -24,11 +26,11 @@ namespace Twittor
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
-      /** TODO: 
-          sambungkan ke localconnection
-        
-      */
-      services.AddGraphQLServer();
+      services.AddDbContext<AppDbContext>(options =>
+        options.UseSqlServer(Configuration.GetConnectionString("LocalConnection")));
+      services.AddAuthorization();
+      services.AddGraphQLServer().AddAuthorization();
+      services.AddControllers();
 
     }
 
@@ -44,8 +46,9 @@ namespace Twittor
 
       app.UseRouting();
 
-      app.UseAuthorization();
+
       app.UseAuthentication();
+      app.UseAuthorization();
 
       app.UseEndpoints(endpoints =>
       {
