@@ -14,7 +14,12 @@ namespace Twittor.Data
     public DbSet<Role> Roles { get; set; }
     public DbSet<TwittorModel> TwittorModels { get; set; }
     public DbSet<User> Users { get; set; }
-
     public DbSet<UserRole> UserRoles { get; set; }
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+      modelBuilder.Entity<User>()
+          .HasIndex(p => new { p.Email, p.Username })
+          .IsUnique(true);
+    }
   }
 }

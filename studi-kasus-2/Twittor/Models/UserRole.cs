@@ -7,10 +7,10 @@ namespace Twittor.Models
     [Key]
     public int Id { get; set; }
     [Required]
-    public int RolesId { get; set; }
+    public int RoleID { get; set; }
 
     [Required]
-    public int UsersId { get; set; }
+    public int UserID { get; set; }
 
     public User User { get; set; }
 

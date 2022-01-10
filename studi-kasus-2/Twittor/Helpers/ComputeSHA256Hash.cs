@@ -1,7 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace GraphQLAuth.Helper
+namespace Twittor.Helper
 {
   public class ComputeHash
   {

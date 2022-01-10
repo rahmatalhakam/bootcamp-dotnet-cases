@@ -2,3 +2,5 @@
 
 1. setting connectionstring (database, user, password)
 2. dotnet ef migrations update
+3. dotnet run
+4.
