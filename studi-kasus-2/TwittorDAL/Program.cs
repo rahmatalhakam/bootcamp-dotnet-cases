@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Microsoft.Extensions.Configuration;
+using TwittorDAL.Handlers;
 
 namespace TwittorDAL
 {
@@ -10,7 +11,9 @@ namespace TwittorDAL
 
     static void Main(string[] args)
     {
-      Console.WriteLine("Hello World!");
+      GetAppSettingsFile();
+      ConsumerHandler consumerHandler = new ConsumerHandler(_iconfiguration);
+      consumerHandler.StartAsync();
     }
     private static void GetAppSettingsFile()
     {
