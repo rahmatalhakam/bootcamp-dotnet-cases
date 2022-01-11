@@ -24,41 +24,41 @@ namespace Twittor.GraphQL
       _config = config.Value;
     }
 
-    public UserOutput UserLogin(LoginInput login, [Service] AppDbContext context, [Service] IOptions<AppSettings> _appSettings)
-    {
-      string loginHash = ComputeHash.ComputeSha256HashFunc(login.Password);
-      var result = context.Users.Where(co => co.Username == login.Username && co.Password == loginHash).SingleOrDefault();
-      if (result == null)
-        throw new UserNotFoundException();
-      // List<Claim> claims = new List<Claim>();
-      // claims.Add(new Claim(ClaimTypes.Name, result.Username));
-      // var roles = await GetRolesFromUser(username);
-      // foreach (var role in roles)
-      // {
-      //   claims.Add(new Claim(ClaimTypes.Role, role));
-      // }
-      var userToken = new UserToken
-      {
-        Email = result.Email,
-        FullName = result.FullName,
-        Id = result.Id,
-        Username = result.Username
-      };
+    // public UserOutput UserLogin(LoginInput login, [Service] AppDbContext context, [Service] IOptions<AppSettings> _appSettings)
+    // {
+    //   string loginHash = ComputeHash.ComputeSha256HashFunc(login.Password);
+    //   var result = context.Users.Where(co => co.Username == login.Username && co.Password == loginHash).SingleOrDefault();
+    //   if (result == null)
+    //     throw new UserNotFoundException();
+    //   // List<Claim> claims = new List<Claim>();
+    //   // claims.Add(new Claim(ClaimTypes.Name, result.Username));
+    //   // var roles = await GetRolesFromUser(username);
+    //   // foreach (var role in roles)
+    //   // {
+    //   //   claims.Add(new Claim(ClaimTypes.Role, role));
+    //   // }
+    //   var userToken = new UserToken
+    //   {
+    //     Email = result.Email,
+    //     FullName = result.FullName,
+    //     Id = result.Id,
+    //     Username = result.Username
+    //   };
 
-      var tokenHandler = new JwtSecurityTokenHandler();
-      var key = Encoding.ASCII.GetBytes(_appSettings.Value.Secret);
-      var tokenDescriptor = new SecurityTokenDescriptor
-      {
-        // Subject = new ClaimsIdentity(claims),
-        Expires = DateTime.UtcNow.AddHours(1),
-        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
-          SecurityAlgorithms.HmacSha256Signature)
-      };
+    //   var tokenHandler = new JwtSecurityTokenHandler();
+    //   var key = Encoding.ASCII.GetBytes(_appSettings.Value.Secret);
+    //   var tokenDescriptor = new SecurityTokenDescriptor
+    //   {
+    //     // Subject = new ClaimsIdentity(claims),
+    //     Expires = DateTime.UtcNow.AddHours(1),
+    //     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
+    //       SecurityAlgorithms.HmacSha256Signature)
+    //   };
 
-      var token = tokenHandler.CreateToken(tokenDescriptor);
-      userToken.Token = tokenHandler.WriteToken(token);
-      return userToken;
-    }
+    //   var token = tokenHandler.CreateToken(tokenDescriptor);
+    //   userToken.Token = tokenHandler.WriteToken(token);
+    //   return userToken;
+    // }
     public async Task<string> Register(RegisterInput register)
     {
       try
