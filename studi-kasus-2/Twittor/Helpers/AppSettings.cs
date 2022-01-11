@@ -1,4 +1,4 @@
-namespace GraphQLAuth.Helper
+namespace Twittor.Helper
 {
   public class AppSettings
   {

@@ -2,8 +2,8 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 using Confluent.Kafka;
-using GraphQLAuth.Helper;
 using Twittor.Constants;
+using Twittor.Helper;
 using Twittor.Helpers;
 
 namespace Twittor.KafkaHandlers

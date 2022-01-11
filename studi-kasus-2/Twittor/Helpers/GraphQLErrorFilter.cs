@@ -1,7 +1,7 @@
 using System;
 using HotChocolate;
 
-namespace GraphQLAuth.Helper
+namespace Twittor.Helper
 {
   public class GraphQLErrorFilter : IErrorFilter
   {
@@ -12,7 +12,9 @@ namespace GraphQLAuth.Helper
       if (error.Exception is DuplicateUsername e)
         return error.WithMessage($"Username already used.");
       if (error.Exception is DataNotFound dnf)
-        return error.WithMessage($"Data tidak ditemukan");
+        return error.WithMessage($"Data tidak ditemukan.");
+      if (error.Exception is UserLockedException ule)
+        return error.WithMessage($"User status locked.");
       return error;
     }
 
@@ -26,4 +28,5 @@ namespace GraphQLAuth.Helper
   public class DuplicateUsername : Exception { }
 
   public class DataNotFound : Exception { }
+  public class UserLockedException : Exception { }
 }

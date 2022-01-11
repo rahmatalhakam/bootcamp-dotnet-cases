@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using GraphQLAuth.Helper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -17,6 +16,7 @@ using Microsoft.IdentityModel.Tokens;
 using Twittor.Data;
 using Twittor.GraphQL;
 using Twittor.Handlers;
+using Twittor.Helper;
 
 namespace Twittor
 {
