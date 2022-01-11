@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using HotChocolate;
+using HotChocolate.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -103,6 +104,7 @@ namespace Twittor.GraphQL
       }
     }
 
+    [Authorize(Roles = new[] { "MEMBER", "ADMIN" })]
     public async Task<string> UpdatePassword(UpdatePassInput input)
     {
       try
@@ -119,6 +121,7 @@ namespace Twittor.GraphQL
       }
     }
 
+    [Authorize(Roles = new[] { "ADMIN" })]
     public async Task<string> LockUser(LockUserInput input)
     {
       try
@@ -151,6 +154,7 @@ namespace Twittor.GraphQL
       }
     }
 
+    [Authorize(Roles = new[] { "ADMIN" })]
     public async Task<string> UpdateRoleForUser(UserRoleUpdate input)
     {
       try
@@ -167,6 +171,7 @@ namespace Twittor.GraphQL
       }
     }
 
+    [Authorize(Roles = new[] { "MEMBER", "ADMIN" })]
     public async Task<string> UpdateProfile(ProfileInput input)
     {
       try
@@ -183,6 +188,7 @@ namespace Twittor.GraphQL
       }
     }
 
+    [Authorize(Roles = new[] { "MEMBER" })]
     public async Task<string> AddTwot(TwotInput input)
     {
       try
@@ -199,6 +205,7 @@ namespace Twittor.GraphQL
       }
     }
 
+    [Authorize(Roles = new[] { "MEMBER" })]
     public async Task<string> DeleteTwot(int input)
     {
       try
@@ -215,6 +222,7 @@ namespace Twittor.GraphQL
       }
     }
 
+    [Authorize(Roles = new[] { "MEMBER" })]
     public async Task<string> AddComment(CommentInput input)
     {
       try

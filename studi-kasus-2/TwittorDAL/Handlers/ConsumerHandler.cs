@@ -77,27 +77,27 @@ namespace TwittorDAL.Handlers
             UsersController usersController = new UsersController(_iconfiguration);
             switch (cr.Message.Key)
             {
-              case "Registration":
+              case TopicKeyList.Registration:
                 RegisterInput des1 = JsonSerializer.Deserialize<RegisterInput>(cr.Message.Value);
                 usersController.Registration(des1);
                 break;
-              case "UpdatePasword":
+              case TopicKeyList.UpdatePassword:
                 UpdatePassInput des2 = JsonSerializer.Deserialize<UpdatePassInput>(cr.Message.Value);
                 usersController.UpdatePassword(des2);
                 break;
-              case "LockUser":
+              case TopicKeyList.LockUser:
                 LockUserInput des3 = JsonSerializer.Deserialize<LockUserInput>(cr.Message.Value);
                 usersController.LockUser(des3);
                 break;
-              case "AddRoleForUser":
+              case TopicKeyList.AddRoleForUser:
                 UserRoleInput des4 = JsonSerializer.Deserialize<UserRoleInput>(cr.Message.Value);
                 usersController.AddRoleForUser(des4);
                 break;
-              case "UpdateRoleForUser":
+              case TopicKeyList.UpdateRoleForUser:
                 UserRoleUpdate des5 = JsonSerializer.Deserialize<UserRoleUpdate>(cr.Message.Value);
                 usersController.UpdateRoleForUser(des5);
                 break;
-              case "UpdateProfile":
+              case TopicKeyList.UpdateProfile:
                 ProfileInput des6 = JsonSerializer.Deserialize<ProfileInput>(cr.Message.Value);
                 usersController.UpdateProfile(des6);
                 break;
@@ -148,11 +148,11 @@ namespace TwittorDAL.Handlers
             TwittorsController twittorController = new TwittorsController(_iconfiguration);
             switch (cr.Message.Key)
             {
-              case "AddTwot":
+              case TopicKeyList.AddTwot:
                 TwotInput des1 = JsonSerializer.Deserialize<TwotInput>(cr.Message.Value);
                 twittorController.AddTwot(des1);
                 break;
-              case "DeleteTwot":
+              case TopicKeyList.DeleteTwot:
                 int des2 = JsonSerializer.Deserialize<int>(cr.Message.Value);
                 twittorController.DeleteTwot(des2);
                 break;
@@ -203,7 +203,7 @@ namespace TwittorDAL.Handlers
             CommentsController commentsController = new CommentsController(_iconfiguration);
             switch (cr.Message.Key)
             {
-              case "AddComment":
+              case TopicKeyList.AddComment:
                 CommentInput des1 = JsonSerializer.Deserialize<CommentInput>(cr.Message.Value);
                 commentsController.AddComment(des1);
                 break;
