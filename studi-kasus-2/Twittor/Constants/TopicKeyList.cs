@@ -9,6 +9,9 @@ namespace Twittor.Constants
     public const string UpdateRoleForUser = "UpdateRoleForUser";
     public const string UpdateProfile = "UpdateProfile";
     public const string AddTwot = "AddTwot";
+    public const string GetTwot = "GetTwot";
+    public const string GetComment = "GetCommnet";
+    public const string GetProfile = "GetProfile";
     public const string DeleteTwot = "DeleteTwot";
     public const string AddComment = "AddComment";
 
