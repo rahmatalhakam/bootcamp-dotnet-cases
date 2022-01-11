@@ -4,10 +4,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Confluent.Kafka;
 using Confluent.Kafka.Admin;
-using GraphQLAuth.Helper;
-using HotChocolate;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
 using Twittor.Constants;
 using Twittor.Helpers;
 
@@ -15,12 +12,12 @@ namespace Twittor.Handlers
 {
   public class TopicInitHandler
   {
-    public static async Task TopicInit([Service] IOptions<KafkaConfig> configuration)
+    public static async Task TopicInit(IConfiguration configuration)
     {
 
       var config = new ProducerConfig
       {
-        BootstrapServers = configuration.Value.BootstrapServers,
+        BootstrapServers = configuration.GetSection("KafkaConfig:BootstrapServers").Value,
         ClientId = Dns.GetHostName(),
       };
       using (var adminClient = new AdminClientBuilder(config).Build())
@@ -37,8 +34,8 @@ namespace Twittor.Handlers
             await adminClient.CreateTopicsAsync(new List<TopicSpecification> {
                 new TopicSpecification {
                     Name = topic,
-                    NumPartitions = configuration.Value.NumPartitions,
-                    ReplicationFactor = configuration.Value.ReplicationFactor
+                    NumPartitions = Int16.Parse(configuration["NumPartitions"]),
+                    ReplicationFactor = Int16.Parse(configuration["ReplicationFactor"])
                 } });
             LoggingConsole.Log($"Topic {topic} created successfully");
           }

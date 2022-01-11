@@ -16,6 +16,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Twittor.Data;
 using Twittor.GraphQL;
+using Twittor.Handlers;
 
 namespace Twittor
 {
@@ -23,6 +24,7 @@ namespace Twittor
   {
     public Startup(IConfiguration configuration)
     {
+
       Configuration = configuration;
     }
 
