@@ -21,31 +21,31 @@ namespace Twittor.GraphQL
     */
     // public async Task<UserPayload> Register(RegisterInput register, [Service] AppDbContext context)
     // {
-    //   var user = new User
+    // var user = new User
+    // {
+    //   Email = register.Email,
+    //   FullName = register.FullName,
+    //   Password = ComputeHash.ComputeSha256HashFunc(register.Password),
+    //   Username = register.Username
+
+    // };
+    // try
+    // {
+    //   context.Users.Add(user);
+    //   var result = await context.SaveChangesAsync();
+    //   var UserPayload = new UserPayload
     //   {
     //     Email = register.Email,
     //     FullName = register.FullName,
-    //     Password = ComputeHash.ComputeSha256HashFunc(register.Password),
     //     Username = register.Username
-
     //   };
-    //   try
-    //   {
-    //     context.Users.Add(user);
-    //     var result = await context.SaveChangesAsync();
-    //     var UserPayload = new UserPayload
-    //     {
-    //       Email = register.Email,
-    //       FullName = register.FullName,
-    //       Username = register.Username
-    //     };
-    //     return UserPayload;
-    //   }
-    //   catch (System.Exception)
-    //   {
-    //     throw new DuplicateUsername();
+    //   return UserPayload;
+    // }
+    // catch (System.Exception)
+    // {
+    //   throw new DuplicateUsername();
 
-    //   }
+    // }
 
     // }
 

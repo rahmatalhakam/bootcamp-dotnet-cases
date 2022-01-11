@@ -39,10 +39,12 @@ namespace Twittor
         .AddQueryType<Query>()
         .AddMutationType<Mutation>();
 
+      services.Configure<KafkaConfig>(Configuration.GetSection("KafkaConfig"));
+
       var appSettingSection = Configuration.GetSection("AppSettings");
       services.Configure<AppSettings>(appSettingSection);
-      var appSettings = appSettingSection.Get<AppSettings>();
 
+      var appSettings = appSettingSection.Get<AppSettings>();
       var key = Encoding.ASCII.GetBytes(appSettings.Secret);
       services.AddAuthentication(x =>
       {
