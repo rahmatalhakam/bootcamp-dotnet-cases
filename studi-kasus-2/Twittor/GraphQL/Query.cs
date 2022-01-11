@@ -21,8 +21,8 @@ namespace Twittor.GraphQL
               UserID = p.User.Id
             });
 
-    public IQueryable<ProfileInput> GetProfiles(int userID, [Service] AppDbContext context) =>
-            context.Users.Where(u => u.Id == userID).Select(p => new ProfileInput()
+    public IQueryable<ProfileOutput> GetProfiles(int userID, [Service] AppDbContext context) =>
+            context.Users.Where(u => u.Id == userID).Select(p => new ProfileOutput()
             {
               Id = p.Id,
               Email = p.Email,

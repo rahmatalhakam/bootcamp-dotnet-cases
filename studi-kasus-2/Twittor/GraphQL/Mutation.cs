@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using HotChocolate;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Twittor.Constants;
@@ -22,32 +23,33 @@ namespace Twittor.GraphQL
   public class Mutation
   {
     private readonly KafkaConfig _config;
+    private readonly AppSettings _appSettings;
 
-    /** TODO:
-5. login -> langsung ambil database
-*/
-
-    public Mutation([Service] IOptions<KafkaConfig> config)
+    public Mutation([Service] IOptions<KafkaConfig> config, [Service] IOptions<AppSettings> appSettings)
     {
       _config = config.Value;
+      _appSettings = appSettings.Value;
     }
 
-    public async Task<UserOutput> UserLogin(LoginInput login, [Service] AppDbContext context, [Service] IOptions<AppSettings> _appSettings)
+    public async Task<UserOutput> UserLogin(LoginInput login, [Service] AppDbContext context)
     {
       string loginHash = ComputeHash.ComputeSha256HashFunc(login.Password);
       var result2 = context.Users.Where(co => co.Username == login.Username && co.Lock == false).SingleOrDefault();
       if (result2 == null)
         throw new UserLockedException();
-      var result = context.Users.Where(co => co.Username == login.Username && co.Password == loginHash).SingleOrDefault();
+      var result = context.Users.Where(co => co.Username == login.Username && co.Password == loginHash).Include(p => p.UserRoles).SingleOrDefault();
       if (result == null)
         throw new UserNotFoundException();
       List<Claim> claims = new List<Claim>();
       claims.Add(new Claim(ClaimTypes.Name, result.Username));
 
-      foreach (var role in result.UserRoles)
+      foreach (var userRole in result.UserRoles)
       {
-        Console.WriteLine("role" + role.Role.Name);
-        claims.Add(new Claim(ClaimTypes.Role, role.Role.Name));
+        var roleResult = context.Roles.Where(o => o.Id == userRole.RoleID).FirstOrDefault();
+        if (roleResult != null)
+        {
+          claims.Add(new Claim(ClaimTypes.Role, roleResult.Name));
+        }
       }
       var userToken = new UserOutput
       {
@@ -61,7 +63,7 @@ namespace Twittor.GraphQL
       };
 
       var tokenHandler = new JwtSecurityTokenHandler();
-      var key = Encoding.ASCII.GetBytes(_appSettings.Value.Secret);
+      var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
       var tokenDescriptor = new SecurityTokenDescriptor
       {
         Subject = new ClaimsIdentity(claims),

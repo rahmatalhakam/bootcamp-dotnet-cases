@@ -38,8 +38,11 @@ namespace Twittor
       services.AddAuthorization();
       services.AddGraphQLServer()
         .AddAuthorization()
+        .ModifyRequestOptions(opt => opt.IncludeExceptionDetails = true)
         .AddQueryType<Query>()
         .AddMutationType<Mutation>();
+      services.AddErrorFilter<GraphQLErrorFilter>();
+
 
       services.Configure<KafkaConfig>(Configuration.GetSection("KafkaConfig"));
 
