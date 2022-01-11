@@ -12,5 +12,6 @@ namespace Twittor.Constants
     public const string DeleteTwot = "DeleteTwot";
     public const string AddComment = "AddComment";
 
+    public const string UserLogin = "UserLogin";
   }
 }

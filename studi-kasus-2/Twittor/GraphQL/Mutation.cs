@@ -13,6 +13,7 @@ using Twittor.Constants;
 using Twittor.Data;
 using Twittor.Dtos;
 using Twittor.Helper;
+using Twittor.Helpers;
 using Twittor.KafkaHandlers;
 using Twittor.Models;
 
@@ -31,7 +32,7 @@ namespace Twittor.GraphQL
       _config = config.Value;
     }
 
-    public UserOutput UserLogin(LoginInput login, [Service] AppDbContext context, [Service] IOptions<AppSettings> _appSettings)
+    public async Task<UserOutput> UserLogin(LoginInput login, [Service] AppDbContext context, [Service] IOptions<AppSettings> _appSettings)
     {
       string loginHash = ComputeHash.ComputeSha256HashFunc(login.Password);
       var result2 = context.Users.Where(co => co.Username == login.Username && co.Lock == false).SingleOrDefault();
@@ -71,15 +72,27 @@ namespace Twittor.GraphQL
 
       var token = tokenHandler.CreateToken(tokenDescriptor);
       userToken.Token = tokenHandler.WriteToken(token);
-      return userToken;
+      try
+      {
+        var content = JsonSerializer.Serialize(login);
+        Boolean res = await Producerhandler.ProduceMessage(TopicList.LoggingTopic, _config, TopicKeyList.UserLogin, content);
+        if (res) LoggingConsole.Log("Produce user message succeed.");
+        else LoggingConsole.Log("Produce register message failed.");
+      }
+      catch (System.Exception)
+      {
+        throw;
+      }
+      return await Task.FromResult(userToken);
     }
     public async Task<string> Register(RegisterInput register)
     {
       try
       {
         var content = JsonSerializer.Serialize(register);
-        var result = await Producerhandler.ProduceMessage(TopicList.UserTopic, _config, TopicKeyList.Registration, content);
-        if (result) return "Produce register message succeed.";
+        var result1 = await Producerhandler.ProduceMessage(TopicList.UserTopic, _config, TopicKeyList.Registration, content);
+        var result2 = await Producerhandler.ProduceMessage(TopicList.LoggingTopic, _config, TopicKeyList.Registration, content);
+        if (result1 && result2) return "Produce register message succeed.";
         else throw new System.Exception("Produce register message failed.");
       }
       catch (System.Exception ex)
