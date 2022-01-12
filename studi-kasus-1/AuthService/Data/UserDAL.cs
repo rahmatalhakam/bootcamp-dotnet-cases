@@ -43,12 +43,12 @@ namespace AuthService.Data
       }
     }
 
-    public async Task AddRoleForUser(string username, string role)
+    public async Task AddRoleForUser(UserRole input)
     {
-      var user = await _userManager.FindByNameAsync(username);
+      var user = await _userManager.FindByNameAsync(input.Username);
       try
       {
-        var result = await _userManager.AddToRoleAsync(user, role);
+        var result = await _userManager.AddToRoleAsync(user, input.Rolename);
         if (!result.Succeeded)
         {
 
@@ -91,7 +91,7 @@ namespace AuthService.Data
       var tokenDescriptor = new SecurityTokenDescriptor
       {
         Subject = new ClaimsIdentity(claims),
-        Expires = DateTime.UtcNow.AddHours(1),
+        Expires = DateTime.UtcNow.AddHours(3),
         SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
           SecurityAlgorithms.HmacSha256Signature)
       };

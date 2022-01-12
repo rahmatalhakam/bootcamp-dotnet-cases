@@ -78,12 +78,12 @@ namespace AuthService.Controllers
     }
 
     [HttpPost("UserInRole")]
-    public async Task<ActionResult> AddRoleForUser(string username, string role)
+    public async Task<ActionResult> AddRoleForUser(UserRole input)
     {
       try
       {
-        await _user.AddRoleForUser(username, role);
-        return Ok($"Data {username} dan {role} berhaisl ditambahkan");
+        await _user.AddRoleForUser(input);
+        return Ok($"Data {input.Username} dan {input.Rolename} berhaisl ditambahkan");
       }
       catch (Exception ex)
       {

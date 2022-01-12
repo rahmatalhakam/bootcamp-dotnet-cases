@@ -12,7 +12,7 @@ namespace AuthService.Data
     Task Registration(RegisterInput user);
     Task AddRole(string rolename);
     IEnumerable<RoleOutput> GetAllRole();
-    Task AddRoleForUser(string username, string role);
+    Task AddRoleForUser(UserRole input);
     Task<List<string>> GetRolesFromUser(string username);
     Task<User> Authenticate(string username, string password);
   }
