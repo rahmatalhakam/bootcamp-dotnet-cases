@@ -13,7 +13,7 @@ namespace PaymentService.Controllers
 {
 
   [ApiController]
-  [Route("api/e/[controller]")]
+  [Route("api/p/[controller]")]
   [Authorize(Roles = "admin")]
   public class PaymentController : ControllerBase
   {
