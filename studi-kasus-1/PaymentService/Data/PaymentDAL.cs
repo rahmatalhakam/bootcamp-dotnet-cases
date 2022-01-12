@@ -15,14 +15,30 @@ namespace PaymentService.Data
       _db = db;
     }
 
-    public Task<Payment> GetById(int id)
+    public async Task<IEnumerable<Payment>> GetAll()
     {
-      throw new NotImplementedException();
+      var result = await _db.Payments.AsNoTracking().ToListAsync();
+      return result;
     }
 
-    public Task<Payment> Insert(Payment obj)
+    public async Task<Payment> GetById(int id)
     {
-      throw new NotImplementedException();
+      var result = await _db.Payments.Where(e => e.PaymentId == id).AsNoTracking().SingleAsync();
+      return result;
+    }
+
+    public async Task<Payment> Insert(Payment obj)
+    {
+      try
+      {
+        var result = await _db.Payments.AddAsync(obj);
+        await _db.SaveChangesAsync();
+        return result.Entity;
+      }
+      catch (System.Exception ex)
+      {
+        throw new Exception($"Error: {ex.Message}");
+      }
     }
   }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using PaymentService.Models;
 
 namespace PaymentService.Data
 {
@@ -9,6 +10,6 @@ namespace PaymentService.Data
     {
 
     }
-
+    public DbSet<Payment> Payments { get; set; }
   }
 }

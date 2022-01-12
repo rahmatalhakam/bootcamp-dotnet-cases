@@ -69,6 +69,7 @@ namespace PaymentService
       });
 
       services.AddScoped<IPayment<Payment>, PaymentDAL>();
+      services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
       services.AddControllers().AddNewtonsoftJson(options =>
             options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
@@ -99,8 +100,9 @@ namespace PaymentService
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AppDbContext context)
     {
+      context.Database.Migrate();
       if (env.IsDevelopment())
       {
         app.UseDeveloperExceptionPage();
