@@ -91,7 +91,7 @@ namespace AuthService.Controllers
       }
     }
 
-    [HttpGet("/{username}/Role")]
+    [HttpGet("{username}/Role")]
     public async Task<ActionResult<List<string>>> GetRolesFromUser(string username)
     {
       try

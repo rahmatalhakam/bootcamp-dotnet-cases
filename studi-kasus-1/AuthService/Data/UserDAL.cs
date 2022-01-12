@@ -127,7 +127,7 @@ namespace AuthService.Data
     public async Task<List<string>> GetRolesFromUser(string username)
     {
       List<string> roles = new List<string>();
-      var user = await _userManager.FindByEmailAsync(username);
+      var user = await _userManager.FindByNameAsync(username);
       if (user == null)
         throw new Exception($"{username} tidak dimukan");
       var results = await _userManager.GetRolesAsync(user);
