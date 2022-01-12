@@ -12,7 +12,7 @@ namespace EnrollmentService.Controllers
 {
   [Route("/api/e/[controller]")]
   [ApiController]
-  [Authorize]
+  [Authorize(Roles = "admin")]
   public class CoursesController : ControllerBase
   {
     private ICourse _course;
@@ -42,9 +42,17 @@ namespace EnrollmentService.Controllers
     }
 
     [HttpGet("bytitle")]
-    public async Task<IEnumerable<Course>> GetByTitle(string title)
+    public async Task<ActionResult<IEnumerable<Course>>> GetByTitle(string title)
     {
-      return await _course.GetByTitle(title);
+      try
+      {
+        var result = await _course.GetByTitle(title);
+        return Ok(result);
+      }
+      catch (Exception ex)
+      {
+        return BadRequest(ex.Message);
+      }
     }
 
     [HttpPost]
@@ -91,9 +99,17 @@ namespace EnrollmentService.Controllers
     }
 
     [HttpGet("bystudentid")]
-    public async Task<IEnumerable<Course>> GetByStudentID(int id)
+    public async Task<ActionResult<IEnumerable<Course>>> GetByStudentID(int id)
     {
-      return await _course.GetByStudentID(id);
+      try
+      {
+        var result = await _course.GetByStudentID(id);
+        return Ok(result);
+      }
+      catch (Exception ex)
+      {
+        return BadRequest(ex.Message);
+      }
     }
 
   }

@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Security.Claims;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
 using EnrollmentService.Data;
@@ -8,7 +12,7 @@ using EnrollmentService.Dtos;
 using EnrollmentService.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
+using static System.Net.Mime.MediaTypeNames;
 
 namespace EnrollmentService.Controllers
 {
@@ -17,12 +21,14 @@ namespace EnrollmentService.Controllers
   [Authorize(Roles = "admin")]
   public class StudentsController : ControllerBase
   {
+    private readonly IHttpClientFactory _httpClientFactory;
     private IStudent _student;
     private IMapper _mapper;
-    public StudentsController(IStudent student, IMapper mapper)
+    public StudentsController(IStudent student, IMapper mapper, IHttpClientFactory httpClientFactory)
     {
       _student = student ?? throw new ArgumentNullException(nameof(student));
       _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+      _httpClientFactory = httpClientFactory;
     }
 
     [HttpGet]
@@ -47,8 +53,22 @@ namespace EnrollmentService.Controllers
     [HttpPost]
     public async Task<ActionResult<StudentOutput>> Post([FromBody] StudentInput student)
     {
+      string userId = User.FindFirst(ClaimTypes.Name)?.Value;
       try
       {
+        //mbuat user sekalian juga berarti
+        // var userRole = new UserRole { Username = userId, Rolename = "student" };
+        // var sf = JsonSerializer.Serialize(userRole);
+        // Console.WriteLine(sf);
+        // var todoItemJson = new StringContent(
+        //   JsonSerializer.Serialize(userRole),
+        //   Encoding.UTF8,
+        //   Application.Json
+        // );
+        // using var httpResponseMessage =
+        //     await _httpClientFactory.CreateClient().PostAsync("https://localhost:5001/api/a/Users/UserInRole", todoItemJson);
+
+        // httpResponseMessage.EnsureSuccessStatusCode();
         var dtos = _mapper.Map<Student>(student);
         var result = await _student.Insert(dtos);
         return Ok(_mapper.Map<StudentOutput>(result));

@@ -1,4 +1,4 @@
-﻿using System;
+﻿
 namespace EnrollmentService.Dtos
 {
   public class CourseOutput

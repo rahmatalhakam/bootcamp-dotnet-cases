@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EnrollmentService.Controllers;
 using EnrollmentService.Data;
 using EnrollmentService.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -16,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
 
 namespace EnrollmentService
@@ -78,7 +80,8 @@ namespace EnrollmentService
             options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
                 .AddXmlDataContractSerializerFormatters();
       services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
+      var uriString = appSettings.AuthUrl;
+      services.AddHttpClient<StudentsController>();
       services.AddSwaggerGen(c =>
       {
         c.SwaggerDoc("v1", new OpenApiInfo { Title = "EnrollmentService", Version = "v1" });
@@ -117,7 +120,7 @@ namespace EnrollmentService
       app.UseHttpsRedirection();
 
       app.UseRouting();
-
+      app.UseAuthentication();
       app.UseAuthorization();
 
       app.UseEndpoints(endpoints =>

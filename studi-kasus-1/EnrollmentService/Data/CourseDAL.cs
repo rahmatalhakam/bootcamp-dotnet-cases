@@ -50,7 +50,7 @@ namespace EnrollmentService.Data
 
     public async Task<IEnumerable<Course>> GetByTitle(string title)
     {
-      var results = await (from c in _db.Courses where c.Title.ToLower().Contains(title.ToLower()) select c).ToListAsync();
+      var results = await _db.Courses.Where(c => c.Title.Contains(title.ToLower())).ToListAsync();
       if (results == null)
         throw new Exception("Data tidak ditemukan");
       return results;
