@@ -81,7 +81,7 @@ namespace EnrollmentService
                 .AddXmlDataContractSerializerFormatters();
       services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
       var uriString = appSettings.AuthUrl;
-      services.AddHttpClient<StudentsController>();
+      services.AddHttpClient<EnrollmentController>();
       services.AddSwaggerGen(c =>
       {
         c.SwaggerDoc("v1", new OpenApiInfo { Title = "EnrollmentService", Version = "v1" });

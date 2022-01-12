@@ -56,19 +56,7 @@ namespace EnrollmentService.Controllers
       string userId = User.FindFirst(ClaimTypes.Name)?.Value;
       try
       {
-        //mbuat user sekalian juga berarti
-        // var userRole = new UserRole { Username = userId, Rolename = "student" };
-        // var sf = JsonSerializer.Serialize(userRole);
-        // Console.WriteLine(sf);
-        // var todoItemJson = new StringContent(
-        //   JsonSerializer.Serialize(userRole),
-        //   Encoding.UTF8,
-        //   Application.Json
-        // );
-        // using var httpResponseMessage =
-        //     await _httpClientFactory.CreateClient().PostAsync("https://localhost:5001/api/a/Users/UserInRole", todoItemJson);
 
-        // httpResponseMessage.EnsureSuccessStatusCode();
         var dtos = _mapper.Map<Student>(student);
         var result = await _student.Insert(dtos);
         return Ok(_mapper.Map<StudentOutput>(result));
