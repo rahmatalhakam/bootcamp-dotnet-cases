@@ -41,7 +41,7 @@ namespace EnrollmentService
       {
         Console.WriteLine("--> using Sql server Db");
         services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(
-          Configuration.GetConnectionString("PlatformsConn")
+          Configuration.GetConnectionString("ProdConn")
         ));
       }
       else

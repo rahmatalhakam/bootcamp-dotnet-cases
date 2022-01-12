@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: authservice-dpl
+  name: enrollmentservice-dpl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: authservice
+      app: enrollmentservice
   template:
     metadata:
       labels:
-        app: authservice
+        app: enrollmentservice
     spec:
       containers:
-      - name: authservice
-        image: rahmatalhakam/authservice:latest
+      - name: enrollmentservice
+        image: rahmatalhakam/enrollmentservice:latest
         resources:
           limits:
             memory: "128Mi"
@@ -25,13 +25,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: auth-clusterip-srv
+  name: enrollment-clusterip-srv
 spec:
   type: ClusterIP
   selector:
-    app: authservice
+    app: enrollmentservice
   ports:
-  - name: authservice
+  - name: enrollmentservice
     protocol: TCP
     port: 80
     targetPort: 80
