@@ -13,7 +13,11 @@ namespace EnrollmentService.Data
       {
         return;
       }
-
+      var res = context.Courses;
+      if (res != null)
+      {
+        return;
+      }
       var courses = new Course[]
       {
         new Course{Title="Cloud Fundamentals", Credits=3},
