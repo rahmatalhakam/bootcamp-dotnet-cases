@@ -49,7 +49,7 @@ namespace TwittorLog
         }
         catch (OperationCanceledException)
         {
-          // Ctrl-C was pressed.
+          // Ctrl-C was pressed..
         }
         finally
         {

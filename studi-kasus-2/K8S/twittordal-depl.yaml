@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: twittordal-dpl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: twittordal
+  template:
+    metadata:
+      labels:
+        app: twittordal
+    spec:
+      containers:
+      - name: twittordal
+        image: rahmatalhakam/twittordal:latest
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: twittordal-clusterip-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: twittordal
+  ports:
+  - name: twittordal
+    protocol: TCP
+    port: 80
+    targetPort: 80
