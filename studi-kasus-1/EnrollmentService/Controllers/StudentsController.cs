@@ -40,7 +40,6 @@ namespace EnrollmentService.Controllers
     }
 
     [HttpGet("{id}")]
-    [Authorize(Roles = "student")]
     public async Task<ActionResult<StudentOutput>> Get(string id)
     {
       var results = await _student.GetById(id);
@@ -96,7 +95,6 @@ namespace EnrollmentService.Controllers
     }
 
     [HttpGet("{id}/course")]
-    [Authorize(Roles = "student")]
     public async Task<IEnumerable<Student>> GetByCourseId(int id)
     {
       var results = await _student.GetByCourseID(id);

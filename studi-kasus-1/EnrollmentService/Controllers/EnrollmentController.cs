@@ -21,7 +21,7 @@ namespace EnrollmentService.Controllers
 
   [ApiController]
   [Route("api/e/[controller]")]
-  [Authorize(Roles = "admin")]
+  [Authorize(Roles = "admin, student")]
   public class EnrollmentController : ControllerBase
   {
     private IEnrollment _enrollment;
