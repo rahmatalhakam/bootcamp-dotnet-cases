@@ -64,11 +64,13 @@ namespace EnrollmentService.Data
       try
       {
         var result = await GetById(id);
+        Console.WriteLine(result.EnrollmentId);
         if (result == null)
           throw new Exception($"Data id={id} tidak ditemukan");
-
         result.CourseId = obj.CourseId;
         result.StudentId = obj.StudentId;
+        result.Student = _db.Students.Where(s => s.Id == obj.StudentId).SingleOrDefault();
+        result.Course = _db.Courses.Where(c => c.CourseId == obj.CourseId).SingleOrDefault();
         _db.Enrollments.Update(result);
         await _db.SaveChangesAsync();
         return result;
